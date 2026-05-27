@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>글로벌 트렌드 상품 탐지 — {{ date_str }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--bg:#0a0a0a;--bg2:#161616;--bg3:#1f1f1f;
+  --accent:#ff7a59;--accent2:#ffb088;--ab:rgba(255,122,89,.28);
+  --white:#f5f1e8;--gray:#a8a39a;
+  --green:#4ade80;--red:#f06b6a}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--white);
+  font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;
+  font-weight:400;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+a{color:var(--accent2);text-decoration:none}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;
+  border-bottom:1px solid rgba(255,122,89,.18);background:rgba(10,10,10,.97);
+  position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.6rem}
+.logo{font-family:'Pretendard Variable',sans-serif;font-size:1.3rem;font-weight:700;color:var(--accent2)}
+.logo span{font-weight:400;color:var(--white)}
+.date{font-size:.85rem;color:var(--gray)}
+.badge{display:inline-block;margin-left:.5rem;padding:2px 8px;background:rgba(74,222,128,.14);
+  border:1px solid rgba(74,222,128,.35);border-radius:2px;font-size:.72rem;color:#4ade80;font-weight:500}
+
+.page{padding:2rem 1.5rem;max-width:900px;margin:0 auto}
+
+.sec-label{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:.6rem;font-weight:500}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:400;margin-bottom:.5rem;line-height:1.2}
+.sec-title em{font-style:italic;color:var(--accent2)}
+.sec-sub{font-size:.96rem;color:var(--gray);line-height:1.75;margin-bottom:2rem}
+
+.intro{background:linear-gradient(135deg,#1a1410 0%,#221610 100%);
+  border:1px solid var(--ab);padding:1.5rem;border-radius:6px;margin-bottom:2rem}
+.intro-title{font-size:.86rem;color:var(--accent2);font-weight:600;margin-bottom:.6rem;letter-spacing:.04em}
+.intro-text{font-size:.94rem;color:var(--white);line-height:1.75}
+
+.card-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+
+.card{background:var(--bg2);border:1px solid rgba(255,122,89,.2);
+  padding:1.5rem;border-radius:6px;transition:all .25s ease;
+  position:relative;overflow:hidden}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(255,122,89,.12)}
+
+.card-rank{position:absolute;top:1rem;right:1.3rem;font-family:'Cormorant Garamond',serif;
+  font-size:3.5rem;color:rgba(255,122,89,.18);line-height:1;font-weight:400}
+
+.card-cat{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.5rem;font-weight:600}
+.card-name{font-size:1.3rem;color:var(--white);font-weight:700;margin-bottom:.2rem;line-height:1.3}
+.card-name-en{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--gray);margin-bottom:1rem}
+
+.card-row{display:flex;gap:.6rem;margin-bottom:.6rem;font-size:.88rem;line-height:1.6}
+.card-row-icon{flex-shrink:0;color:var(--accent2);font-weight:600;min-width:60px}
+.card-row-text{color:var(--white)}
+
+.score-badge{display:inline-block;margin-top:.8rem;padding:5px 14px;
+  background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.35);
+  border-radius:3px;font-family:'DM Mono',monospace;font-size:.84rem;color:#4ade80;font-weight:600}
+.score-badge.mid{background:rgba(255,176,136,.14);border-color:rgba(255,176,136,.35);color:var(--accent2)}
+.score-badge.lo{background:rgba(240,107,106,.14);border-color:rgba(240,107,106,.35);color:#f06b6a}
+
+.detail-btn{display:inline-block;margin-top:1.2rem;padding:.8rem 1.4rem;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+  color:#111;font-weight:600;font-size:.88rem;border-radius:4px;
+  letter-spacing:.02em;border:none;cursor:pointer;
+  transition:transform .15s ease}
+.detail-btn:hover{transform:translateY(-1px);color:#111}
+
+.error{background:rgba(240,107,106,.1);border:1px solid rgba(240,107,106,.35);
+  padding:1.5rem;border-radius:6px;color:var(--red);font-size:.95rem;line-height:1.75;margin-bottom:2rem}
+
+.disc{font-size:.84rem;color:var(--gray);line-height:1.8;padding:2rem 1.5rem;
+  border-top:1px solid rgba(255,122,89,.12);text-align:center;margin-top:3rem}
+.disc strong{color:var(--accent2)}
+
+@media(max-width:600px){
+  .page{padding:1.5rem 1rem}
+  .sec-title{font-size:1.8rem}
+  nav{padding:.8rem 1rem}
+  .card-rank{font-size:2.5rem}
+  .card-name{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">트렌드 <span>파인더</span></div>
+  <div class="date">
+    {{ timestamp_str }}
+    <span class="badge">매일 아침 갱신</span>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="sec-label">Daily Global Trend Discovery</div>
+  <div class="sec-title">한국에는 아직 없는<br>해외 <em>뜨는 상품</em> 5</div>
+  <div class="sec-sub">
+    Google Trends · Amazon Movers & Shakers · Etsy 인기 상품 데이터 기반.
+    Claude AI가 6단계 검증 통과한 한국 진입 후보를 매일 선정합니다.
+  </div>
+
+  {% if error_message %}
+  <div class="error">⚠️ {{ error_message }}</div>
+  {% endif %}
+
+  <div class="intro">
+    <div class="intro-title">📊 오늘의 선정 기준</div>
+    <div class="intro-text">
+      ① 미국 검색량 상승<br>
+      ② 한국 검색량 낮음 (갭 존재)<br>
+      ③ 콘텐츠화 가능 (시각적·감성적)<br>
+      ④ 저위험 (소형·경량·2~5만원대 추정)<br>
+      ⑤ 행동경제학·치알디니 심리 자극 2개 이상<br>
+      ⑥ 충동/반복 구매 가능 영역
+    </div>
+  </div>
+
+  <div class="card-grid">
+    {% for c in candidates %}
+    <a href="{{ c.filename }}" style="text-decoration:none">
+      <div class="card">
+        <div class="card-rank">{{ c.rank }}</div>
+        <div class="card-cat">{{ c.category }}</div>
+        <div class="card-name">{{ c.name_ko }}</div>
+        <div class="card-name-en">{{ c.name_en }}</div>
+
+        <div class="card-row">
+          <div class="card-row-icon">📈 트렌드</div>
+          <div class="card-row-text">{{ c.trend_signal }}</div>
+        </div>
+        <div class="card-row">
+          <div class="card-row-icon">🇰🇷 갭</div>
+          <div class="card-row-text">{{ c.korea_gap_signal }}</div>
+        </div>
+
+        {% set score = c.score|int %}
+        <div class="score-badge {{ 'lo' if score < 5 else 'mid' if score < 7 else '' }}">
+          한국 진입 가능성 {{ score }}/10
+        </div>
+
+        <div style="margin-top:1rem">
+          <span class="detail-btn">상세 분석 보기 →</span>
+        </div>
+      </div>
+    </a>
+    {% else %}
+    <div class="error">
+      오늘 후보가 생성되지 않았습니다. 다음 빌드를 기다리거나 Actions를 수동 실행해주세요.
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="disc">
+    본 리포트는 공개 데이터(Google Trends · Amazon · Etsy) 기반 트렌드 분석 정보입니다.<br>
+    <strong>실제 사업 결정은 본인의 추가 검증과 판단에 따라 이루어져야 합니다.</strong><br>
+    데이터 출처 신뢰도와 표본 한계가 있을 수 있습니다.
+  </div>
+</div>
+
+</body>
+</html>

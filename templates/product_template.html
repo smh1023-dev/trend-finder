@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ product.product_name_ko }} - 트렌드 리포트</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--bg:#0a0a0a;--bg2:#161616;--bg3:#1f1f1f;
+  --accent:#ff7a59;--accent2:#ffb088;--ab:rgba(255,122,89,.28);
+  --white:#f5f1e8;--gray:#a8a39a;
+  --green:#4ade80;--red:#f06b6a;--blue:#7ab0ff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--white);
+  font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;
+  font-weight:400;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+a{color:var(--accent2);text-decoration:none}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;
+  border-bottom:1px solid rgba(255,122,89,.18);background:rgba(10,10,10,.97);
+  position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.6rem}
+.logo{font-family:'Pretendard Variable',sans-serif;font-size:1.3rem;font-weight:700;color:var(--accent2)}
+.logo span{font-weight:400;color:var(--white)}
+.back-btn{font-size:.86rem;color:var(--gray);padding:.4rem .9rem;
+  border:1px solid rgba(255,122,89,.25);border-radius:3px;transition:all .2s ease}
+.back-btn:hover{border-color:var(--accent);color:var(--accent2)}
+
+.page{padding:2rem 1.5rem;max-width:880px;margin:0 auto}
+
+.hero{margin-bottom:2.5rem}
+.hero-rank{font-family:'Cormorant Garamond',serif;font-size:.85rem;color:var(--accent2);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+.hero-cat{display:inline-block;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent2);padding:3px 10px;border:1px solid var(--ab);border-radius:2px;margin-bottom:1rem}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:600;line-height:1.15;margin-bottom:.4rem}
+.hero-name-en{font-family:'DM Mono',monospace;font-size:1rem;color:var(--gray);margin-bottom:1.5rem;letter-spacing:-.02em}
+
+.score-row{display:flex;gap:.8rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.score-pill{padding:6px 14px;background:var(--bg2);border:1px solid var(--ab);
+  border-radius:20px;font-size:.82rem;color:var(--white);font-family:'DM Mono',monospace}
+.score-pill .lbl{color:var(--gray);margin-right:.4rem}
+.score-pill.success{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.4);color:#4ade80}
+
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
+.signal-card{background:linear-gradient(135deg,#1a1410 0%,#221610 100%);
+  border:1px solid var(--ab);padding:1.2rem;border-radius:5px}
+.signal-icon{font-size:.78rem;color:var(--accent2);font-weight:600;margin-bottom:.4rem;letter-spacing:.04em}
+.signal-text{font-size:.9rem;color:var(--white);line-height:1.65}
+
+section{margin-bottom:2.5rem}
+.sec-h{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;
+  color:var(--accent2);margin-bottom:1rem;padding-bottom:.5rem;
+  border-bottom:1px solid rgba(255,122,89,.2)}
+.sec-h em{font-style:italic;color:var(--white)}
+
+.q-card{background:var(--bg2);border:1px solid rgba(255,122,89,.15);
+  padding:1.1rem 1.3rem;border-radius:4px;margin-bottom:.8rem}
+.q-icon{font-size:.78rem;color:var(--accent2);font-weight:600;margin-bottom:.4rem;letter-spacing:.03em}
+.q-text{font-size:.94rem;color:var(--white);line-height:1.7}
+
+.psy-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.psy-card{background:linear-gradient(180deg,#1a1612 0%,#1f1a16 100%);
+  border:1px solid var(--ab);padding:1.2rem;border-radius:5px}
+.psy-title{font-size:.84rem;color:var(--accent2);font-weight:700;margin-bottom:.5rem;letter-spacing:.03em}
+.psy-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.7rem}
+.psy-tag{padding:3px 10px;background:rgba(255,122,89,.12);
+  border:1px solid var(--ab);border-radius:12px;font-size:.74rem;color:var(--accent2);font-weight:500}
+.psy-explain{font-size:.88rem;color:var(--white);line-height:1.65}
+
+.hook-card{background:linear-gradient(135deg,#1a1612 0%,#231915 100%);
+  border:1px solid var(--ab);padding:1rem 1.2rem;border-radius:4px;margin-bottom:.6rem;
+  display:flex;align-items:flex-start;gap:.8rem}
+.hook-time{flex-shrink:0;width:80px;font-family:'DM Mono',monospace;font-size:.76rem;
+  color:var(--accent2);padding-top:2px}
+.hook-text{flex:1}
+.hook-label{font-size:.7rem;color:var(--gray);margin-bottom:.2rem;letter-spacing:.04em;text-transform:uppercase}
+.hook-content{font-size:1.05rem;color:var(--white);font-weight:600;line-height:1.4}
+
+.copy-btn{display:inline-block;margin-left:.4rem;padding:2px 8px;font-size:.7rem;
+  background:transparent;border:1px solid rgba(255,176,136,.3);
+  border-radius:3px;color:var(--accent2);cursor:pointer;
+  font-family:'Pretendard Variable',sans-serif}
+.copy-btn:hover{background:rgba(255,122,89,.1)}
+
+.est-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-bottom:1rem}
+.est-cell{background:var(--bg3);border:1px solid var(--ab);padding:1rem;border-radius:4px;text-align:center}
+.est-lbl{font-size:.74rem;color:var(--gray);margin-bottom:.4rem;letter-spacing:.04em}
+.est-val{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--white);font-weight:600}
+
+.success-meter{background:var(--bg3);border:1px solid var(--ab);padding:1.3rem;border-radius:5px;text-align:center;margin-top:1rem}
+.success-lbl{font-size:.78rem;color:var(--gray);margin-bottom:.4rem;letter-spacing:.04em}
+.success-val{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;line-height:1}
+.success-val.hi{color:var(--green)}
+.success-val.mid{color:var(--accent2)}
+.success-val.lo{color:var(--red)}
+
+.disc{font-size:.82rem;color:var(--gray);line-height:1.8;padding:2rem 1.5rem;
+  border-top:1px solid rgba(255,122,89,.12);text-align:center;margin-top:3rem}
+.disc strong{color:var(--accent2)}
+
+@media(max-width:680px){
+  .page{padding:1.5rem 1rem}
+  .hero-name{font-size:2rem}
+  .signal-grid, .psy-grid{grid-template-columns:1fr}
+  nav{padding:.8rem 1rem}
+  .hook-card{flex-direction:column;gap:.3rem}
+  .hook-time{width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">트렌드 <span>파인더</span></div>
+  <a href="index.html" class="back-btn">← 목록으로</a>
+</nav>
+
+<div class="page">
+
+  <!-- 헤더 -->
+  <div class="hero">
+    <div class="hero-rank">No. {{ product.rank }} / 5</div>
+    <div class="hero-cat">{{ product.category }}</div>
+    <div class="hero-name">{{ product.product_name_ko }}</div>
+    <div class="hero-name-en">{{ product.product_name_en }}</div>
+
+    {% set est = product.detail.estimated %}
+    {% set score = est.korea_success_score|int %}
+    <div class="score-row">
+      <span class="score-pill {% if score >= 7 %}success{% endif %}">
+        <span class="lbl">한국 성공 가능성</span>{{ score }}/10
+      </span>
+      <span class="score-pill">
+        <span class="lbl">예상 판매가</span>{{ est.selling_price_krw }}
+      </span>
+      <span class="score-pill">
+        <span class="lbl">예상 마진</span>{{ est.margin_percent }}
+      </span>
+    </div>
+
+    <div class="signal-grid">
+      <div class="signal-card">
+        <div class="signal-icon">📈 트렌드 신호</div>
+        <div class="signal-text">{{ product.trend_signal }}</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon">🇰🇷 한국 갭 신호</div>
+        <div class="signal-text">{{ product.korea_gap_signal }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. 왜 뜨는가 -->
+  <section>
+    <div class="sec-h">1. 왜 <em>뜨는가</em></div>
+    {% set w = product.detail.why_trending %}
+    <div class="q-card">
+      <div class="q-icon">🌐 해외 트렌드 근거</div>
+      <div class="q-text">{{ w.overseas_reason }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">🔍 검색량 증가 이유</div>
+      <div class="q-text">{{ w.search_growth_reason }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">💬 소비자 반응 이유</div>
+      <div class="q-text">{{ w.consumer_response }}</div>
+    </div>
+  </section>
+
+  <!-- 2. 한국 경쟁 -->
+  <section>
+    <div class="sec-h">2. 왜 <em>한국에 갭이 있는가</em></div>
+    {% set k = product.detail.korea_gap %}
+    <div class="q-card">
+      <div class="q-icon">📦 공급 부족</div>
+      <div class="q-text">{{ k.supply_shortage }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">🎨 브랜딩 부족</div>
+      <div class="q-text">{{ k.branding_gap }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">📱 콘텐츠 부족</div>
+      <div class="q-text">{{ k.content_gap }}</div>
+    </div>
+  </section>
+
+  <!-- 3. 타깃 -->
+  <section>
+    <div class="sec-h">3. 예상 <em>타깃</em></div>
+    {% set t = product.detail.target %}
+    <div class="q-card">
+      <div class="q-icon">👤 연령 / 성별</div>
+      <div class="q-text">{{ t.age_gender }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">🛒 구매 상황</div>
+      <div class="q-text">{{ t.purchase_context }}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">💖 핵심 감정 포인트</div>
+      <div class="q-text">{{ t.emotional_trigger }}</div>
+    </div>
+  </section>
+
+  <!-- 4. 심리 분석 -->
+  <section>
+    <div class="sec-h">4. 행동경제학 + <em>치알디니</em> 분석</div>
+    {% set p = product.detail.psychology %}
+    <div class="psy-grid">
+      <div class="psy-card">
+        <div class="psy-title">🎯 치알디니 설득 요소</div>
+        <div class="psy-tags">
+          {% for tag in p.cialdini_elements %}
+            <span class="psy-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        <div class="psy-explain">{{ p.cialdini_explanation }}</div>
+      </div>
+      <div class="psy-card">
+        <div class="psy-title">🧠 카너먼 행동경제학</div>
+        <div class="psy-tags">
+          {% for tag in p.kahneman_elements %}
+            <span class="psy-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        <div class="psy-explain">{{ p.kahneman_explanation }}</div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-icon">💾 저장 / 공유 트리거</div>
+      <div class="q-text">{{ p.save_share_trigger }}</div>
+    </div>
+  </section>
+
+  <!-- 5. 릴스 후킹 -->
+  <section>
+    <div class="sec-h">5. 릴스 <em>후킹 문구</em></div>
+    {% set h = product.detail.reels_hooks %}
+    <div class="hook-card">
+      <div class="hook-time">0:00-0:01</div>
+      <div class="hook-text">
+        <div class="hook-label">첫 1초 후킹</div>
+        <div class="hook-content">{{ h.first_second_hook }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-time">0:01-0:03</div>
+      <div class="hook-text">
+        <div class="hook-label">스크롤 멈춤</div>
+        <div class="hook-content">{{ h.stop_scroll }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-time">중반</div>
+      <div class="hook-text">
+        <div class="hook-label">저장 유도</div>
+        <div class="hook-content">{{ h.save_trigger }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-time">중반</div>
+      <div class="hook-text">
+        <div class="hook-label">댓글 유도</div>
+        <div class="hook-content">{{ h.comment_trigger }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-time">후반</div>
+      <div class="hook-text">
+        <div class="hook-label">구매 충동</div>
+        <div class="hook-content">{{ h.purchase_urge }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+    <div class="hook-card">
+      <div class="hook-time">엔딩</div>
+      <div class="hook-text">
+        <div class="hook-label">CTA</div>
+        <div class="hook-content">{{ h.cta }} <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousSibling.textContent.trim())">복사</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 수익화 추정 -->
+  <section>
+    <div class="sec-h">6. 수익화 <em>추정</em></div>
+    <div class="est-grid">
+      <div class="est-cell">
+        <div class="est-lbl">예상 판매가</div>
+        <div class="est-val">{{ est.selling_price_krw }}</div>
+      </div>
+      <div class="est-cell">
+        <div class="est-lbl">예상 원가</div>
+        <div class="est-val">{{ est.estimated_cost_krw }}</div>
+      </div>
+      <div class="est-cell">
+        <div class="est-lbl">예상 마진</div>
+        <div class="est-val">{{ est.margin_percent }}</div>
+      </div>
+    </div>
+    <div class="success-meter">
+      <div class="success-lbl">한국 시장 진입 성공 가능성</div>
+      <div class="success-val {% if score >= 7 %}hi{% elif score >= 5 %}mid{% else %}lo{% endif %}">{{ score }}<span style="font-size:1.5rem;color:var(--gray)"> / 10</span></div>
+    </div>
+  </section>
+
+  <div class="disc">
+    본 분석은 Google Trends · Amazon · Etsy 공개 데이터와 Claude AI 추론 기반입니다.<br>
+    <strong>실제 진입 전 네이버 검색량(블랙키위·키워드마스터), 1688/알리바바 소싱 가능성, 샘플 발주 후 품질 검증이 반드시 필요합니다.</strong><br>
+    예상 가격·마진은 추정치이며 실제와 다를 수 있습니다.
+  </div>
+</div>
+
+</body>
+</html>
