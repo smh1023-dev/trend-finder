@@ -109,6 +109,17 @@ def main() -> int:
             product=c,
         )
         (args.output_dir / filename).write_text(html, encoding='utf-8')
+
+        # 메인 카드용 핵심 링크 3개 (Amazon, 네이버, 1688)
+        links = c.get('links', {})
+        quick_links = []
+        if links.get('us'):
+            quick_links.append(links['us'][0])  # Amazon
+        if links.get('kr'):
+            quick_links.append(links['kr'][0])  # 네이버
+        if links.get('sourcing'):
+            quick_links.append(links['sourcing'][0])  # 1688
+
         product_files.append({
             'rank': rank,
             'name_ko': name_ko,
@@ -118,6 +129,7 @@ def main() -> int:
             'trend_signal': c.get('trend_signal', ''),
             'korea_gap_signal': c.get('korea_gap_signal', ''),
             'score': c.get('detail', {}).get('estimated', {}).get('korea_success_score', 0),
+            'quick_links': quick_links,
         })
         log.info("  ✓ %s (%d bytes)", filename, (args.output_dir / filename).stat().st_size)
 
