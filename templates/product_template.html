@@ -99,6 +99,39 @@ section{margin-bottom:2.5rem}
   border-top:1px solid rgba(255,122,89,.12);text-align:center;margin-top:3rem}
 .disc strong{color:var(--accent2)}
 
+/* 검증 링크 섹션 */
+.verify-note{font-size:.88rem;color:var(--gray);line-height:1.7;margin-bottom:1.2rem;
+  padding:.8rem 1rem;background:rgba(255,122,89,.08);border-left:3px solid var(--accent);border-radius:3px}
+.link-group{margin-bottom:1.5rem}
+.link-group-title{font-size:.95rem;color:var(--accent2);font-weight:700;
+  margin-bottom:.7rem;letter-spacing:.02em}
+.link-group-sub{font-size:.74rem;color:var(--gray);font-weight:400;margin-left:.4rem}
+
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.verify-link{display:flex;gap:.8rem;padding:.9rem 1rem;
+  background:var(--bg2);border:1px solid var(--ab);border-radius:4px;
+  text-decoration:none;color:var(--white);transition:all .2s ease;
+  align-items:flex-start}
+.verify-link:hover{border-color:var(--accent);background:#1c1612;
+  transform:translateX(2px);color:var(--white)}
+.vl-icon{font-size:1.3rem;flex-shrink:0;line-height:1.2}
+.vl-body{flex:1;min-width:0}
+.vl-title{font-size:.92rem;font-weight:600;color:var(--accent2);margin-bottom:.25rem;line-height:1.3}
+.vl-arrow{font-size:.78rem;color:var(--gray);margin-left:.2rem}
+.vl-hint{font-size:.78rem;color:var(--gray);line-height:1.5}
+
+.verify-checklist{margin-top:1.5rem;padding:1.1rem 1.3rem;
+  background:linear-gradient(135deg,#1a1410 0%,#221610 100%);
+  border:1px solid var(--ab);border-radius:5px}
+.vc-title{font-size:.92rem;color:var(--accent2);font-weight:700;margin-bottom:.7rem}
+.verify-checklist ol{margin:0;padding-left:1.4rem;color:var(--white)}
+.verify-checklist li{font-size:.88rem;line-height:1.85;margin-bottom:.25rem}
+.verify-checklist strong{color:var(--accent2)}
+
+@media(max-width:680px){
+  .link-grid{grid-template-columns:1fr}
+}
+
 @media(max-width:680px){
   .page{padding:1.5rem 1rem}
   .hero-name{font-size:2rem}
@@ -305,6 +338,75 @@ section{margin-bottom:2.5rem}
       <div class="success-val {% if score >= 7 %}hi{% elif score >= 5 %}mid{% else %}lo{% endif %}">{{ score }}<span style="font-size:1.5rem;color:var(--gray)"> / 10</span></div>
     </div>
   </section>
+
+  <!-- 7. 검증 링크 -->
+  {% if product.links %}
+  <section>
+    <div class="sec-h">7. 직접 <em>검증</em> 링크</div>
+    <div class="verify-note">
+      클릭 한 번에 실제 사이트로 이동합니다. 진짜 베스트셀러·검색량·경쟁 상황·도매가를 직접 확인하세요.
+    </div>
+
+    <!-- 미국 -->
+    <div class="link-group">
+      <div class="link-group-title">🇺🇸 미국 시장 검증</div>
+      <div class="link-grid">
+        {% for link in product.links.us %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="verify-link">
+          <div class="vl-icon">{{ link.icon }}</div>
+          <div class="vl-body">
+            <div class="vl-title">{{ link.title }} <span class="vl-arrow">↗</span></div>
+            <div class="vl-hint">{{ link.hint }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 한국 -->
+    <div class="link-group">
+      <div class="link-group-title">🇰🇷 한국 시장 검증 <span class="link-group-sub">(⭐ 진입 결정의 핵심)</span></div>
+      <div class="link-grid">
+        {% for link in product.links.kr %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="verify-link">
+          <div class="vl-icon">{{ link.icon }}</div>
+          <div class="vl-body">
+            <div class="vl-title">{{ link.title }} <span class="vl-arrow">↗</span></div>
+            <div class="vl-hint">{{ link.hint }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 소싱 -->
+    <div class="link-group">
+      <div class="link-group-title">🏭 소싱 (원가 추정 + 샘플 발주)</div>
+      <div class="link-grid">
+        {% for link in product.links.sourcing %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="verify-link">
+          <div class="vl-icon">{{ link.icon }}</div>
+          <div class="vl-body">
+            <div class="vl-title">{{ link.title }} <span class="vl-arrow">↗</span></div>
+            <div class="vl-hint">{{ link.hint }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="verify-checklist">
+      <div class="vc-title">📋 추천 검증 순서 (5분 내 완료 가능)</div>
+      <ol>
+        <li><strong>블랙키위</strong> → 한국 월간 검색량 확인 (1,000~10,000 = 황금)</li>
+        <li><strong>네이버 쇼핑</strong> → 검색 시 상품 수 (5,000개 미만 = 저경쟁)</li>
+        <li><strong>Amazon</strong> → 미국 베스트셀러 실물·후기·가격 확인</li>
+        <li><strong>1688</strong> → 중국 도매가 확인 (예상 마진 계산)</li>
+        <li><strong>도매꾹</strong> → 국내 공급 가능 여부 확인</li>
+      </ol>
+    </div>
+  </section>
+  {% endif %}
 
   <div class="disc">
     본 분석은 Google Trends · Amazon · Etsy 공개 데이터와 Claude AI 추론 기반입니다.<br>
