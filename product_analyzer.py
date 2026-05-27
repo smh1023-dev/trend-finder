@@ -285,6 +285,100 @@ def _fallback_detail(candidate: dict) -> dict:
 #  통합 진입점
 # ============================================================
 
+def build_verification_links(candidate: dict) -> dict:
+    """후보 상품에 대한 검증 링크 10개 생성.
+
+    Args:
+        candidate: {product_name_ko, product_name_en, category, ...}
+
+    Returns:
+        {
+          'us': [{title, url, icon, hint}, ...],
+          'kr': [{title, url, icon, hint}, ...],
+          'sourcing': [{title, url, icon, hint}, ...],
+        }
+
+    저작권 안전: 모두 검색 URL이라 실제 사이트로 점프만 함.
+    이미지/콘텐츠를 가져와 표시하지 않음.
+    """
+    from urllib.parse import quote
+
+    name_ko = candidate.get('product_name_ko', '')
+    name_en = candidate.get('product_name_en', '')
+
+    en_q = quote(name_en) if name_en else quote(name_ko)
+    ko_q = quote(name_ko) if name_ko else quote(name_en)
+
+    return {
+        'us': [
+            {
+                'title': 'Amazon 베스트셀러',
+                'url': f'https://www.amazon.com/s?k={en_q}&s=review-rank',
+                'icon': '🛒',
+                'hint': '리뷰 많은 순으로 정렬됨. 실제 인기·가격·후기 확인',
+            },
+            {
+                'title': 'Google Trends',
+                'url': f'https://trends.google.com/trends/explore?geo=US&q={en_q}',
+                'icon': '📈',
+                'hint': '미국 검색량 추세 그래프. 진짜 상승 중인지 확인',
+            },
+            {
+                'title': 'Pinterest 검색',
+                'url': f'https://www.pinterest.com/search/pins/?q={en_q}',
+                'icon': '📌',
+                'hint': '디자인·감성 트렌드 확인. 인스타 콘텐츠 영감',
+            },
+        ],
+        'kr': [
+            {
+                'title': '네이버 쇼핑',
+                'url': f'https://search.shopping.naver.com/search/all?query={ko_q}',
+                'icon': '🟢',
+                'hint': '한국 경쟁 상황. 상품 수가 적으면 갭 존재',
+            },
+            {
+                'title': '쿠팡 검색',
+                'url': f'https://www.coupang.com/np/search?q={ko_q}',
+                'icon': '🟠',
+                'hint': '대형 셀러·PB 진입 여부 확인',
+            },
+            {
+                'title': '블랙키위 (검색량)',
+                'url': f'https://blackkiwi.net/service/keyword/{ko_q}',
+                'icon': '🥝',
+                'hint': '⭐ 한국 월간 검색량. 1,000~10,000이면 황금 구간',
+            },
+            {
+                'title': '셀러마스터 (경쟁도)',
+                'url': f'https://www.sellermaster.net/keyword?keyword={ko_q}',
+                'icon': '📊',
+                'hint': '스마트스토어 경쟁 강도·광고 단가',
+            },
+        ],
+        'sourcing': [
+            {
+                'title': '1688 (중국 도매)',
+                'url': f'https://s.1688.com/selloffer/offer_search.htm?keywords={en_q}',
+                'icon': '🇨🇳',
+                'hint': '가장 큰 도매. 원가 추정. 가격대 파악',
+            },
+            {
+                'title': '도매꾹',
+                'url': f'https://domeggook.com/main/search/search.php?eq={ko_q}',
+                'icon': '🏭',
+                'hint': '국내 도매. 한국 진입 가능한 공급원 찾기',
+            },
+            {
+                'title': 'AliExpress',
+                'url': f'https://www.aliexpress.com/wholesale?SearchText={en_q}',
+                'icon': '🛍️',
+                'hint': '샘플 1~5개 소량 발주용. 품질 검증',
+            },
+        ],
+    }
+
+
 def analyze_all(collected_data: dict) -> list[dict]:
     """수집 데이터 → 후보 선정 → 상세 분석.
 
@@ -320,7 +414,8 @@ def analyze_all(collected_data: dict) -> list[dict]:
     for i, candidate in enumerate(candidates, 1):
         log.info("  [%d/%d] %s", i, len(candidates), candidate.get('product_name_ko'))
         detail = analyze_product_detail(candidate, client)
-        out.append({**candidate, 'detail': detail, 'rank': i})
+        links = build_verification_links(candidate)
+        out.append({**candidate, 'detail': detail, 'links': links, 'rank': i})
 
-    log.info("✓ 분석 완료: %d개", len(out))
+    log.info("✓ 분석 완료: %d개 (검증 링크 10개씩 포함)", len(out))
     return out
